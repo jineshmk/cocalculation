@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CO Calculation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            text-align: center;
+        }
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+        }
+        input[type="file"] {
+            display: block;
+            margin: 0 auto;
+            padding: 10px;
+        }
+        input[type="text"] {
+            display: block;
+            margin: 10px auto;
+            padding: 10px;
+            width: 80%; /* Adjust the width as needed */
+        }
+        input[type="submit"] {
+            display: block;
+            margin: 10px auto;
+            padding: 10px 20px;
+            background-color: #0074d9;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <form action="/upload_file" method="post" enctype="multipart/form-data">
+        <h1>CO Calculation</h1>
+        <input type="file" name="file">
+        <input type="text" name="noofco" placeholder="Enter number of COs" required>
+        <input type="submit" value="Upload">
+    </form>
+</body>
+</html>
