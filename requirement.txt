@@ -3,3 +3,4 @@ pandas
 python-constraint
 xlsxwriter
 openpyxl
+xlrd
