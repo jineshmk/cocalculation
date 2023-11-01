@@ -149,6 +149,6 @@ def print_to_file(data_rows, no_of_cos):
 if __name__ == "__main__":
     from waitress import serve
 
-    #serve(app, host="0.0.0.0", port=80)
-    app.run(debug=True, port=5001, host='0.0.0.0')
+    serve(app, host="0.0.0.0", port=80)
+    #app.run(debug=True, port=5001, host='0.0.0.0')
     # print(maximize_multiple_variables(4,16,18))
