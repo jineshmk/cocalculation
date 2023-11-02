@@ -24,6 +24,10 @@ def upload_file():
 def index():
     return render_template("index.html")
 
+@app.route("/index.html")
+def index_html():
+    return render_template("index.html")
+
 
 def find_average(total_head, df):
     total = 0
@@ -145,6 +149,10 @@ def print_to_file(data_rows, no_of_cos):
     output.seek(0)
     return send_file(output, download_name='output.xlsx', as_attachment=True)
 
+@app.errorhandler(500)
+def internal_error(error):
+
+     return render_template("error.html")
 
 if __name__ == "__main__":
     from waitress import serve
