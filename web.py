@@ -52,12 +52,14 @@ def process_marks(df, no_of_cos):
     total = no_of_cos * 5
     data_rows = []
     aver = [0] * no_of_cos;
-    average = find_average(total_head, df)
+    average = df.loc[:, total_head].mean()
+    print("average"+str(average))
     for ind in df.index:
         mark_per = df[total_head][ind] / 100
         if not pd.isnull(df['RollNo'][ind]):
-            cos = constraint_solve(no_of_cos, math.floor(total * mark_per + (average - df[total_head][ind]) / 100),
-                                   math.ceil(total * mark_per + (average - df[total_head][ind]) / 100))
+            print((total * mark_per + average))
+            cos = constraint_solve(no_of_cos, total*mark_per)
+            #cos = maximize_multiple_variables(no_of_cos,total/100 * mark_per, (total+average)/100 * mark_per)
             # cos = maximize_multiple_variables(no_of_cos, math.floor(total*mark_per+(average-df[total_head][ind])/100),math.ceil(total*mark_per+(average-df[total_head][ind])/100))
             row = {'RollNo': df['RollNo'][ind], 'Name': df['Name'][ind], 'Total': df[total_head][ind]}
             sorted_values = sorted(cos.values(), reverse=True)
@@ -67,23 +69,22 @@ def process_marks(df, no_of_cos):
     return data_rows
 
 
-def maximize_multiple_variables(no_of_cos, lower, upper):
+def maximize_multiple_variables(no_of_cos, lower,upper):
     problem = pulp.LpProblem("Maximization Problem", pulp.LpMaximize)
-    variables_to_maximize = []
+
     variables = {}
 
     for i in range(no_of_cos):
         var_name = f"co{i}"
         variables[var_name] = pulp.LpVariable(var_name, lowBound=1, upBound=5)
-        if i / no_of_cos < 0.50:
-            variables_to_maximize.append(var_name)
+
 
     # Add the sum constraint
     problem += pulp.lpSum(variables.values()) >= lower
     problem += pulp.lpSum(variables.values()) <= upper
 
     # Define the objective to maximize
-    objective = pulp.lpSum(variables[var_name] for var_name in variables_to_maximize)
+    objective = pulp.lpSum(variables[var_name] for var_name in variables)
     problem += objective
 
     problem.solve()
@@ -95,7 +96,7 @@ def maximize_multiple_variables(no_of_cos, lower, upper):
         return None
 
 
-def constraint_solve(no_of_cos, lower, upper):
+def constraint_solve(no_of_cos, lower):
     problem = constraint.Problem()
     variables = []
 
@@ -105,18 +106,20 @@ def constraint_solve(no_of_cos, lower, upper):
         variables.append(var_name)
 
     def sum_constraint(*args):
-        return lower <= sum(args) <= upper
+        return lower < sum(args)
 
     # problem.addConstraint()
     problem.addConstraint(sum_constraint, variables)
 
-    # problem.setObjective(lambda *args: sum(args[var_name] for var_name in variables_to_maximize), maximize=True)
+    #problem.setObjective(lambda *args: sum(args[var_name] for var_name in variables_to_maximize), maximize=True)
     # Find and print solutions
     solutions = problem.getSolutions()
+    if len(solutions) == 0:
+        print(no_of_cos,lower,upper)
     index1 = random.randint(0, len(solutions) - 1)
-    # if solutions:
-    #   max_solution = max(solutions, key=lambda x: sum(x[var] for var in variables_to_maximize))
-    #    return max_solution
+    #if solutions:
+     #  max_solution = max(solutions, key=lambda x: sum(x[var] for var in variables))
+      # return max_solution
 
     return solutions[index1]
 
@@ -158,5 +161,6 @@ if __name__ == "__main__":
     from waitress import serve
 
     serve(app, host="0.0.0.0", port=80)
+
     #app.run(debug=True, port=5001, host='0.0.0.0')
     # print(maximize_multiple_variables(4,16,18))
