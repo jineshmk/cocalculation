@@ -53,23 +53,31 @@ def process_marks(df, no_of_cos):
     data_rows = []
     aver = [0] * no_of_cos;
     average = df.loc[:, total_head].mean()
-    print("average"+str(average))
+
     for ind in df.index:
         mark_per = df[total_head][ind] / 100
+        upper = df[total_head][ind]+average
+
+        if total*mark_per > average/100:
+            max_value = total*mark_per
+        else:
+            max_value = average/100
+        if max_value < no_of_cos:
+             max_value = no_of_cos
         if not pd.isnull(df['RollNo'][ind]):
-            print((total * mark_per + average))
-            cos = constraint_solve(no_of_cos, total*mark_per)
+
+            cos =constraint_solve(no_of_cos, math.ceil(max_value))
             #cos = maximize_multiple_variables(no_of_cos,total/100 * mark_per, (total+average)/100 * mark_per)
             # cos = maximize_multiple_variables(no_of_cos, math.floor(total*mark_per+(average-df[total_head][ind])/100),math.ceil(total*mark_per+(average-df[total_head][ind])/100))
             row = {'RollNo': df['RollNo'][ind], 'Name': df['Name'][ind], 'Total': df[total_head][ind]}
-            sorted_values = sorted(cos.values(), reverse=True)
-            cos = {k: sorted_values[i] for i, k in enumerate(cos.keys())}
+            #sorted_values = sorted(cos.values(), reverse=True)
+            #cos = {k: sorted_values[i] for i, k in enumerate(cos.keys())}
             row.update(cos)
             data_rows.append(row)
     return data_rows
 
 
-def maximize_multiple_variables(no_of_cos, lower,upper):
+def maximize_multiple_variables(no_of_cos, lower, upper):
     problem = pulp.LpProblem("Maximization Problem", pulp.LpMaximize)
 
     variables = {}
@@ -96,32 +104,29 @@ def maximize_multiple_variables(no_of_cos, lower,upper):
         return None
 
 
-def constraint_solve(no_of_cos, lower):
+def constraint_solve(no_of_cos,  upper):
     problem = constraint.Problem()
     variables = []
-
     for i in range(no_of_cos):
         var_name = f"co{i + 1}"
         problem.addVariable(var_name, range(1, 6))  # Variables can be 1 to 10
         variables.append(var_name)
 
     def sum_constraint(*args):
-        return lower < sum(args)
-
+        return sum(args) <= upper
     # problem.addConstraint()
     problem.addConstraint(sum_constraint, variables)
-
     #problem.setObjective(lambda *args: sum(args[var_name] for var_name in variables_to_maximize), maximize=True)
     # Find and print solutions
     solutions = problem.getSolutions()
-    if len(solutions) == 0:
-        print(no_of_cos,lower,upper)
-    index1 = random.randint(0, len(solutions) - 1)
-    #if solutions:
-     #  max_solution = max(solutions, key=lambda x: sum(x[var] for var in variables))
-      # return max_solution
+    #index1 = random.randint(0, len(solutions) - 1)
+    if solutions:
+        max_solution = max(solutions, key=lambda x: sum(x[var] for var in variables))
+        return max_solution
+    else:
+        return None
 
-    return solutions[index1]
+    #return solutions[index1]
 
 
 def print_to_file(data_rows, no_of_cos):
