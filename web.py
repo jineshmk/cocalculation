@@ -17,7 +17,7 @@ def upload_file():
     file = request.files["file"]
     no_of_co = int(request.form["noofco"])
     df = pd.read_excel(file, skiprows=range(0, 3))
-    return print_to_file(process_marks(df, no_of_co), no_of_co)
+    return print_to_file(process_grade(df, no_of_co), no_of_co)
 
 
 @app.route("/")
@@ -28,15 +28,6 @@ def index():
 def index_html():
     return render_template("index.html")
 
-
-def find_average(total_head, df):
-    total = 0
-    count = 0
-    for ind in df.index:
-        if not pd.isnull(df['RollNo'][ind]):
-            total = + total
-            count = count + 1
-    return total / count
 
 
 def process_marks(df, no_of_cos):
@@ -76,6 +67,60 @@ def process_marks(df, no_of_cos):
             data_rows.append(row)
     return data_rows
 
+def process_grade(df, no_of_cos):
+    total_head = ""
+    column_names = list(df.columns)
+    columns_to_print = ['RollNo', 'Name']
+    for column_name in column_names:
+        # print(column_name)
+        if 'Total' in column_name:
+            total_head = column_name
+            columns_to_print.append(column_name)
+    # Print the columns
+    columns_to_print.append('Grade')
+    total = no_of_cos * 5
+    data_rows = []
+    aver = [0] * no_of_cos;
+    average = df.loc[:, total_head].mean()
+
+    for ind in df.index:
+        grade = df['Grade'][ind]
+        lower = 0
+        upper = 0
+        if not pd.isnull(df['RollNo'][ind]):
+            grade = df['Grade'][ind]
+            if grade == "O":
+                lower = 5
+                upper = 5
+            elif grade == "A+":
+                lower = 5
+                upper = 5
+            elif grade == "A":
+                lower = 4
+                upper = 5
+            elif grade == "B+":
+                lower = 3
+                upper = 4
+            elif grade == "B":
+                lower = 2
+                upper = 4
+            elif grade == "C":
+                lower = 2
+                upper = 3
+            elif grade == "P":
+                lower = 1
+                upper = 2
+            else:
+                lower = 1
+                upper = 1
+            cos = constraint_solve_for_grade(no_of_cos, lower,upper)
+            row = {'RollNo': df['RollNo'][ind], 'Name': df['Name'][ind], 'Total': df[total_head][ind],'Grade': df['Grade'][ind]}
+            if random.randrange(1, 5) > 1:
+                sorted_values = sorted(cos.values(), reverse=True)
+                cos = {k: sorted_values[i] for i, k in enumerate(cos.keys())}
+            row.update(cos)
+            data_rows.append(row)
+    return data_rows
 
 def maximize_multiple_variables(no_of_cos, lower, upper):
     problem = pulp.LpProblem("Maximization Problem", pulp.LpMaximize)
@@ -128,6 +173,14 @@ def constraint_solve(no_of_cos,  upper):
 
     #return solutions[index1]
 
+def constraint_solve_for_grade(no_of_cos,  lower, upper):
+
+    variables = {}
+    for i in range(no_of_cos):
+        var_name = f"co{i + 1}"
+        variables.update()
+        variables[var_name] = random.randrange(lower, upper+1)
+    return variables
 
 def print_to_file(data_rows, no_of_cos):
     cos = {}
@@ -139,7 +192,8 @@ def print_to_file(data_rows, no_of_cos):
     data = {
         'RollNo': [],
         'Name': [],
-        'Total': []}
+        'Total': [],
+        'Grade' : []}
     data.update(cos)
     df = pd.DataFrame(data)
     for row_data in data_rows:
