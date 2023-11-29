@@ -1,9 +1,9 @@
 import os
 
-import pulp
+#import pulp
 from flask import Flask, request, render_template, send_file
 import pandas as pd
-from werkzeug.utils import secure_filename
+#from werkzeug.utils import secure_filename
 import constraint
 import random
 import math
