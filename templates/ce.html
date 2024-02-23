@@ -45,14 +45,15 @@
 <body>
     <form action="/mark_dist" method="post" enctype="multipart/form-data">
         <h1>Mark Distribution</h1>
-  <p> Input excel file should contain the following coloum name:RollNo,Name,Periodical Exam I,Periodical exam II,Continuous Evaluation <a href="https://github.com/jineshmk/cocalculation/blob/main/new_format.xlsx"> Sample Format</a></p>
+  <p> Input excel file should contain the following coloum name:RollNo,Name,Periodical Exam I,Periodical exam II,Continuous Evaluation,End Semester <a href="https://github.com/jineshmk/cocalculation/raw/main/new_format.xlsx"> Sample Format</a></p>
               <input type="file" name="file" required>
-      <p> Example format : Q1-6-CO1,Q2-7-CO2-am</p>
+      <p> Example format : Q1-6-CO1,Q2-7-CO2</p>
         <input type="text" name="qumark" placeholder="Enter the COs with number of questions" required>
         <select name="componet" id="componet">
              <option value="Periodical Exam I">Periodical Exam I</option>
             <option value="Periodical Exam II">Periodical Exam II</option>
             <option value="Continuous Evaluation">Continuous Evaluation</option>
+            <option value="End Semester">End Semester</option>
     </select>
         <input type="submit" value="Get Report">
     </form>
