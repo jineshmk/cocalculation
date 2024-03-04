@@ -8,47 +8,43 @@
             background-color: #f0f0f0;
             text-align: center;
         }
-        form {
+        .error-container {
             background-color: #fff;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             display: inline-block;
+            margin-top: 50px;
+            max-width: 400px; /* Adjust the width as needed */
         }
-        input[type="file"] {
-            display: block;
-            margin: 0 auto;
-            padding: 10px;
+        h1 {
+            color: #0074d9; /* Highlight color */
         }
-        input[type="text"] {
-            display: block;
-            margin: 10px auto;
-            padding: 10px;
-            width: 80%; /* Adjust the width as needed */
+        p {
+            margin: 10px 0;
         }
-        input[type="submit"] {
-            display: block;
-            margin: 10px auto;
+        a {
+            display: inline-block;
+            margin-top: 20px;
             padding: 10px 20px;
             background-color: #0074d9;
             color: #fff;
-            border: none;
+            text-decoration: none;
             border-radius: 5px;
-            cursor: pointer;
+            transition: background-color 0.3s;
         }
-        input[type="submit"]:hover {
+        a:hover {
             background-color: #0056b3;
         }
     </style>
 </head>
 
 <body>
-
+    <div class="error-container">
         <h1>Mark Distributed</h1>
-        <p>You have either selected an incorrect file or encountered an error. <p>
-        If you think this is wrong message, please report it to <a href="https://github.com/jineshmk/cocalculation/issues">https://github.com/jineshmk/cocalculation/issues</a> </p>
-       <a href="index.html"> Back</a>
-    </form>
+        <p>You have either selected an incorrect file or encountered an error.</p>
+        <p>If you think this is a wrong message, please report it to <a href="https://github.com/jineshmk/cocalculation/issues">https://github.com/jineshmk/cocalculation/issues</a>.</p>
+        <a href="index.html">Back</a>
+    </div>
 </body>
 </html>
-
