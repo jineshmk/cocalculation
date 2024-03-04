@@ -14,30 +14,47 @@
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             display: inline-block;
+            width: 50%; /* Adjust the width as needed */
+            margin: 50px auto; /* Center the form */
         }
-        input[type="file"] {
-            display: block;
-            margin: 0 auto;
+        h1 {
+            color: #0074d9; /* Highlight color */
+        }
+        p {
+            margin: 10px 0;
+        }
+        .form-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            width: 150px; /* Adjust the width as needed */
+            margin-right: 10px;
+            text-align: right;
+        }
+        .form-group input[type="file"],
+        .form-group select {
+            flex: 1;
             padding: 10px;
+            border: 1px solid #ccc; /* Add border for clarity */
+            border-radius: 5px;
         }
-        input[type="text"] {
-            display: block;
-            margin: 10px auto;
-            padding: 10px;
-            width: 80%; /* Adjust the width as needed */
-        }
-        input[type="submit"] {
-            display: block;
-            margin: 10px auto;
-            padding: 10px 20px;
+        .form-group input[type="submit"] {
+            margin-top: 20px;
             background-color: #0074d9;
             color: #fff;
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            padding: 10px 20px;
+            transition: background-color 0.3s;
         }
-        input[type="submit"]:hover {
+        .form-group input[type="submit"]:hover {
             background-color: #0056b3;
+        }
+        a {
+            color: #0074d9; /* Link color */
         }
     </style>
 </head>
@@ -45,16 +62,25 @@
 <body>
     <form action="/mark_dist" method="post" enctype="multipart/form-data">
         <h1>Mark Distribution</h1>
-  <p> Input excel file should contain the following coloum name:RollNo,Name,Periodical Exam I,Periodical exam II,Continuous Evaluation,End Semester <a href="https://github.com/jineshmk/cocalculation/raw/main/new_format.xlsx"> Sample Format</a></p>
-              <input type="file" name="file" required>
-      <p> Example format : Q1-6-CO1,Q2-7-CO2</p>
-        <input type="text" name="qumark" placeholder="Enter the COs with number of questions" required>
-        <select name="componet" id="componet">
-             <option value="Periodical Exam I">Periodical Exam I</option>
-            <option value="Periodical Exam II">Periodical Exam II</option>
-            <option value="Continuous Evaluation">Continuous Evaluation</option>
-            <option value="End Semester">End Semester</option>
-    </select>
+        <p>1. Students Mark Report with the following columns: <strong>RollNo</strong>, <strong>Name</strong>, <strong>Periodical Exam I</strong>, <strong>Periodical Exam II</strong>, <strong>Continuous Evaluation</strong>, <strong>End Semester</strong>.</p>
+        <p>2. Mark distribution with the following columns: <strong>No</strong>, <strong>Mark</strong>, <strong>Threshold</strong>, <strong>Priority</strong>.</p>
+        <div class="form-group">
+            <label for="total">Students Mark File:</label>
+            <input type="file" name="total" id="total" required>
+        </div>
+        <div class="form-group">
+            <label for="qmark">Mark File:</label>
+            <input type="file" name="qmark" id="qmark" required>
+        </div>
+        <div class="form-group">
+            <label for="componet">Component:</label>
+            <select name="componet" id="componet">
+                <option value="Periodical Exam I">Periodical Exam I</option>
+                <option value="Periodical Exam II">Periodical Exam II</option>
+                <option value="Continuous Evaluation">Continuous Evaluation</option>
+                <option value="End Semester">End Semester</option>
+            </select>
+        </div>
         <input type="submit" value="Get Report">
     </form>
 </body>
