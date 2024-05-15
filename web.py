@@ -114,7 +114,8 @@ def process_grade(df, no_of_cos):
                 lower = 1
                 upper = 1
             cos = constraint_solve_for_grade(no_of_cos, lower,upper)
-            row = {'RollNo': df['RollNo'][ind], 'Name': df['Name'][ind], 'Total': df[total_head][ind],'Grade': df['Grade'][ind]}
+            #row = {'RollNo': df['RollNo'][ind], 'Name': df['Name'][ind], 'Total': df[total_head][ind],'Grade': df['Grade'][ind]}
+            row = {'RollNo': df['RollNo'][ind], 'Name': df['Name'][ind]}
             if random.randrange(1, 5) > 1:
                 sorted_values = sorted(cos.values(), reverse=True)
                 cos = {k: sorted_values[i] for i, k in enumerate(cos.keys())}
@@ -191,9 +192,7 @@ def print_to_file(data_rows, no_of_cos):
         cos[var_name] = []
     data = {
         'RollNo': [],
-        'Name': [],
-        'Total': [],
-        'Grade' : []}
+        'Name': []}
     data.update(cos)
     df = pd.DataFrame(data)
     for row_data in data_rows:
